@@ -9,6 +9,8 @@ int cmd_bl(int argc, char **argv)
 {
 	uint32_t level;
 	int i;
+	
+
 
 	if (argc < 1) {
 	  printf("Usage: bl [level 0-%d]\n", BLLED_MAX_LEVEL);
@@ -23,6 +25,7 @@ int cmd_bl(int argc, char **argv)
 	}
 
 	if( level > 0 ) {
+	*((volatile uint32_t *) BLLED_GANG_REG0) = 0x1; // enable bl
 	  for( i = 0; i < BLLED_BANKS; i++ ) {
 	    *((volatile uint32_t *) BLLED_REG0_BANK(i)) = 
 	      ((level << BLLED_REG0_STEP_BIT) & BLLED_REG0_STEP_MSK) |
@@ -30,6 +33,7 @@ int cmd_bl(int argc, char **argv)
 	  }
 
 	} else {
+	*((volatile uint32_t *) BLLED_GANG_REG0) = 0x0; // disable bl
 	  for( i = 0; i < BLLED_BANKS; i++ ) {
 	    *((volatile uint32_t *) BLLED_REG0_BANK(i)) = 0;  // meh
 	  }
