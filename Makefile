@@ -3,6 +3,7 @@ include magic.mk
 
 # isogashii:
 BUILD = build
+BIN = bin
 CROSS_COMPILE=arm-none-eabi-
 
 CFLAGS = -march=armv5te -mfloat-abi=soft -Wall \
@@ -58,29 +59,29 @@ STAGE1_SRC_S = \
 
 STAGE1_OBJ = $(addprefix $(BUILD)/, $(STAGE1_SRC_S:.S=.o) $(STAGE1_SRC_C:.c=.o))
 
-all: $(BUILD)/firmware.bin \
-	$(BUILD)/stage1.bin \
-	$(BUILD)/dump-rom-usb.bin \
-	$(BUILD)/usb-loader.bin \
-	$(BUILD)/mt6261-test.bin \
-	$(BUILD)/fernly-usb-loader
+all: $(BIN)/firmware.bin \
+	$(BIN)/stage1.bin \
+	$(BIN)/dump-rom-usb.bin \
+	$(BIN)/usb-loader.bin \
+	$(BIN)/mt6261-test.bin \
+	$(BIN)/fernly-usb-loader
 clean:
-	$(RM) -rf $(BUILD)
+	$(RM) -rf $(BUILD) $(BIN)
 
-$(BUILD)/fernly-usb-loader: fernly-usb-loader.c sha1.c sha1.h
+$(BIN)/fernly-usb-loader: fernly-usb-loader.c sha1.c sha1.h
 	$(CC_NATIVE) fernly-usb-loader.c sha1.c -o $@
 
-$(BUILD)/%.bin: $(BUILD)/%.o
+$(BIN)/%.bin: $(BUILD)/%.o
 	$(OBJCOPY) -S -O binary $< $@
 
 HEADER_BUILD = $(BUILD)/genhdr
-$(BUILD)/firmware.bin: $(BUILD)/firmware.elf
+$(BIN)/firmware.bin: $(BUILD)/firmware.elf
 	$(OBJCOPY) -S -O binary $(BUILD)/firmware.elf $@
 
 $(BUILD)/firmware.elf: $(OBJ)
 	$(LD) $(LDFLAGS) --entry=reset_handler -o $@ $(OBJ) $(LIBS)
 
-$(BUILD)/stage1.bin: $(BUILD)/stage1.elf
+$(BIN)/stage1.bin: $(BUILD)/stage1.elf
 	$(OBJCOPY) -S -O binary $(BUILD)/stage1.elf $@
 
 $(BUILD)/stage1.elf: $(STAGE1_OBJ)
@@ -95,11 +96,12 @@ $(OBJ_DIRS):
 	$(MKDIR) -p $@ $@/scriptic
 $(HEADER_BUILD):
 	$(MKDIR) -p $@ build/scriptic
+	$(MKDIR) -p $@ bin/
 -include $(OBJ:.o=.P)
 
 test: all
 	novena-usb-hub -d u1 ; sleep 1; novena-usb-hub -e u1 ; sleep 2
-	$(BUILD)/fernly-usb-loader /dev/fernvale $(BUILD)/usb-loader.bin $(BUILD)/firmware.bin
+	$(BUILD)/fernly-usb-loader /dev/fernvale $(BIN)/usb-loader.bin $(BIN)/firmware.bin
 
 shell: all
 	novena-usb-hub -d u1 ; sleep 1; novena-usb-hub -e u1 ; sleep 2
