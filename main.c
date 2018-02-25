@@ -12,7 +12,7 @@
 //#define AUTOMATED
 
 #if !defined(AUTOMATED)
-#define PROMPT "fernly> "
+#define PROMPT "fernly# "
 
 int	rom_getchar(void);
 
@@ -529,7 +529,7 @@ int main(void)
 	serial_puts("will try to enable psram now\n");
 	scriptic_run("set_plls");
 	scriptic_run("enable_psram");
-
+	cmd_help(0,NULL);
 
 
 	while (1)
