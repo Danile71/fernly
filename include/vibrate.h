@@ -1,1 +1,6 @@
-int cmd_vibrate(int argc, char **argv) ;
+#define MOTOR_CTRL 0xa07001b0
+
+#define MOTOR_CTRL_OFF 0x0422
+#define MOTOR_CTRL_LOW 0x8000
+#define MOTOR_CTRL_MED 0x8010
+#define MOTOR_CTRL_HIGH 0x8020

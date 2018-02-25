@@ -361,6 +361,7 @@ extern int cmd_lcd(int argc, char **argv);
 extern int cmd_load(int argc, char **argv);
 extern int cmd_loadjump(int argc, char **argv);
 extern int cmd_keypad(int argc, char **argv);
+extern int cmd_vibrate(int argc, char **argv) ;
 
 static const struct {
 	int (*func)(int argc, char **argv);
