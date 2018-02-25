@@ -5,6 +5,7 @@
 #include "serial.h"
 #include "utils.h"
 #include "scriptic.h"
+#include "vibrate.h"
 
 #include "fernvale-pmic.h"
 
@@ -450,6 +451,12 @@ static const struct {
 		.name = "keypad",
 		.help = "Read keys from keypad until # is pressed ",
 	},
+
+	{
+		.func = cmd_vibrate,
+		.name = "vibrate",
+		.help = "vibate start/stop",
+	},
 };
 
 int cmd_help(int argc, char **argv)
@@ -522,6 +529,8 @@ int main(void)
 	serial_puts("will try to enable psram now\n");
 	scriptic_run("set_plls");
 	scriptic_run("enable_psram");
+
+
 
 	while (1)
 		loop();

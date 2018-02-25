@@ -31,6 +31,7 @@ SRC_C = \
 	emi.c \
 	irq.c \
 	lcd.c \
+	vibrate.c \
 	main.c \
 	scriptic.c \
 	serial.c \
